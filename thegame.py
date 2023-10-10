@@ -35,62 +35,45 @@ class NumberGuessingGame:
         self.start_button.pack()
 
     def start_game(self):
-
         min_num = int(self.min_num_entry.get())
         max_num = int(self.max_num_entry.get())
         max_attempts = int(self.max_attempts_entry.get())
         secret_number = int(self.secret_number_entry.get())
 
         if secret_number < min_num:
-            raise ValueError("typed in number is too low")
+            raise ValueError("Typed-in number is too low")
         if secret_number > max_num:
-            raise ValueError("typed in number is too high")
+            raise ValueError("Typed-in number is too high")
         if min_num <= secret_number <= max_num:
-            print("the typed in number is corect!")
+            print("The typed-in number is correct!")
 
-        attempts = 1
+        attempts = 1  # Start from 1 (the first attempt)
 
         result_label = tk.Label(self.root, text="")
         result_label.pack()
 
         def check_guess():
-            for i in range(max_attempts):
-                try:
-                    nonlocal attempts
-                    guess = int(guess_entry.get())
-                    # Append the user's guess to the list
-                    self.guesses.append(guess)
+            nonlocal attempts
+            guess = int(guess_entry.get())
+            # Append the user's guess to the list
+            self.guesses.append(guess)
 
-                    if guess == secret_number:
-                        result_label.config(
-                            text=f"Congratulations! You guessed the secret number which is {secret_number} ! In {attempts} attempts.")
-                        break
-                    elif guess < secret_number:
-                        result_label.config(text="Too low. Try again.")
-                    else:
-                        result_label.config(text="Too high. Try again.")
+            if guess == secret_number:
+                result_label.config(
+                    text=f"Congratulations! You guessed the number {secret_number} in {attempts} attempts.")
+            elif guess < secret_number:
+                result_label.config(text="Too low. Try again.")
+            else:
+                result_label.config(text="Too high. Try again.")
 
-                    if attempts == max_attempts and guess != secret_number:
-                        result_label.config(
-                            text=f"Sorry, you've run out of attempts. The secret number was {secret_number}.")
-                        break
-                    if attempts > 3:
-                        show_guess = tk.Label(self.root, text=f"Your {attempts}'th guess is {guess}")
-                        show_guess.pack()
-                    if attempts == 1:
-                        show_guess = tk.Label(self.root, text=f"Your {attempts}'st guess is {guess}")
-                        show_guess.pack()
-                    if attempts == 2:
-                        show_guess = tk.Label(self.root, text=f"Your {attempts}'nd guess is {guess}")
-                        show_guess.pack()
-                    if attempts == 3:
-                        show_guess = tk.Label(self.root, text=f"Your {attempts}'rd guess is {guess}")
-                        show_guess.pack()
+            if attempts == max_attempts and guess != secret_number:
+                result_label.config(text=f"Sorry, you've run out of attempts. The secret number was {secret_number}.")
 
-                        attempts += 1
+            # Display the guess attempt number alongside the guess
+            show_guess = tk.Label(self.root, text=f"Attempt {attempts}: {guess}")
+            show_guess.pack()
 
-                except ValueError:
-                    print('stop')
+            attempts += 1
 
         guess_label = tk.Label(self.root, text="Enter your guess:")
         guess_label.pack()
